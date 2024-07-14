@@ -24,15 +24,21 @@ void LedIndicator_Task(void *pvParameter);
 // Public Types 
 //------------------------------------------------------------------------
 
+typedef enum {
+    LED_INDICATOR_CMD_CLEAR,
+    LED_INDICATOR_CMD_SET_COLOUR,
+} led_indicator_cmd; 
+
 typedef struct {
-    uint8_t red; 
-    uint8_t green; 
-    uint8_t blue;
+    uint8_t red;    /*!< Red Colour (Hue & Saturation) */
+    uint8_t green;  /*!< Green Colour (Hue & Saturation) */
+    uint8_t blue;   /*!< Blue Colour (Hue & Saturation) */
 } led_colour_t;
 
-
-
-
+typedef struct {
+    led_indicator_cmd command;  /*!< Command to send to the LED indicator task*/
+    led_colour_t colour;        /*!< RGB Colour variable (optional) */
+} led_indicator_queue_t; 
 
 
 #endif // LED_INDICATOR_H_

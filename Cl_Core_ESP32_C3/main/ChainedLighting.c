@@ -15,6 +15,8 @@
 #include "nvs_flash.h"
 #include "freertos/freeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
+#include "esp_timer.h"
 
 // Project Modules
 #include "config.h"
@@ -23,7 +25,10 @@
 /*******************************************************************************
  * Private Properties  
  ******************************************************************************/
-static const char *TAG = "Main";
+static const char *TAG = "Main"; 
+
+extern QueueHandle_t LedIndicator_QueueHandle;
+
 
 /*******************************************************************************
  * Private Methods 
@@ -78,7 +83,26 @@ static void app_init(void)
  ******************************************************************************/
 static void app_start_tasks(void)
 {
+    xTaskCreate(&LedIndicator_Task, "LedIndicator_Task", 2048, NULL, 5, NULL);
 
+    uint8_t colourSent = false;
+    led_indicator_queue_t colour_test = {
+        .command = LED_INDICATOR_CMD_SET_COLOUR,
+        .colour = {20,10,20}
+    };
+
+    while (true)
+    {
+        /** 
+         * NOTE: This is test code - Demo to set LED indicator Colour From a different Module.
+         */
+        if (esp_timer_get_time() > 5000 * 1000 && colourSent == false)
+        {
+            ESP_LOGI(TAG,"Sending Data...");
+            xQueueSend(LedIndicator_QueueHandle, &colour_test, 0);
+            colourSent = true;
+        }
+    }
 }
 
 

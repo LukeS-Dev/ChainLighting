@@ -10,6 +10,7 @@ idf_component_register(SRCS "ChainedLighting.c"
                         driver
                     # Project Components
                         ledIndicator
+                        esp_timer
                     )
 
                     

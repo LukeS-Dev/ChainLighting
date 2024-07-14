@@ -5,4 +5,5 @@ idf_component_register(
         "src"
         "../../config"
     PRIV_REQUIRES
-        driver)
+        driver
+        espressif__led_strip)
